@@ -1,0 +1,143 @@
+{% extends 'base.html' %}
+
+{% block title %}Secure Download - {{ file.original_name }}{% endblock %}
+
+{% block content %}
+<div class="flex flex-col items-center justify-center min-h-[70vh] py-12 animate-fade-in">
+    <div class="max-w-2xl w-full flex flex-col gap-8">
+        
+        <div class="text-center">
+            <div
+                class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-surface-dark border border-surface-border mb-6">
+                <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                <span class="text-[10px] font-black text-text-muted uppercase tracking-[0.2em]">Secure Uplink
+                    Established</span>
+            </div>
+            <h1 class="text-4xl md:text-5xl font-black text-white tracking-tight uppercase leading-none">Access <span
+                    class="text-primary">Granted</span></h1>
+            <p class="text-text-muted mt-4 text-lg">A secure data vector has been shared with you.</p>
+        </div>
+
+        
+        <div
+            class="bg-surface-dark border border-surface-border rounded-2xl shadow-2xl p-8 relative overflow-hidden group">
+            <div
+                class="absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(244,37,140,0.05)_0%,transparent_70%)]">
+            </div>
+
+            <div class="flex flex-col md:flex-row gap-8 items-center relative z-10">
+                
+                <div
+                    class="size-32 shrink-0 rounded-2xl bg-background-dark border border-surface-border flex items-center justify-center text-primary shadow-[0_0_20px_rgba(244,37,140,0.1)] group-hover:border-primary transition-colors">
+                    <span class="material-symbols-outlined text-6xl">
+                        {% if file.original_name|lower|slice:"-4:" == ".pdf" %}picture_as_pdf
+                        {% elif file.original_name|lower|slice:"-4:" == ".png" or file.original_name|lower|slice:"-4:"
+                        == ".jpg" %}image
+                        {% elif file.original_name|lower|slice:"-4:" == ".zip" %}folder_zip
+                        {% else %}description{% endif %}
+                    </span>
+                </div>
+
+                
+                <div class="flex-1 text-center md:text-left">
+                    <div class="flex flex-wrap items-center justify-center md:justify-start gap-3 mb-3">
+                        <span class="text-[10px] font-bold text-text-muted/70 uppercase tracking-widest">Vector
+                            Detail</span>
+                        <span
+                            class="bg-primary/10 text-primary text-[10px] font-bold px-2 py-0.5 rounded border border-primary/20">AES-256</span>
+                    </div>
+                    <h2 class="text-2xl md:text-3xl font-black text-white tracking-tight mb-4 break-all">{{
+                        file.original_name }}</h2>
+                    <div
+                        class="flex flex-wrap justify-center md:justify-start gap-6 pt-4 border-t border-surface-border/50">
+                        <div>
+                            <p class="text-[10px] font-bold text-text-muted uppercase tracking-widest mb-1">Weight</p>
+                            <p class="text-white font-mono font-bold">{{ file.size|filesizeformat }}</p>
+                        </div>
+                        <div>
+                            <p class="text-[10px] font-bold text-text-muted uppercase tracking-widest mb-1">Format</p>
+                            <p class="text-white font-mono font-bold uppercase">{{
+                                file.original_name|slice:"-4:"|default:"Data" }}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            
+            <div
+                class="mt-10 p-4 bg-background-dark/50 border border-surface-border rounded-xl flex items-center justify-center gap-4">
+                <span class="material-symbols-outlined text-primary">timer</span>
+                <p class="text-xs font-bold text-text-muted uppercase tracking-widest">
+                    This uplink self-destructs in <span class="text-white">{{ link.expires_at|timeuntil }}</span>
+                </p>
+            </div>
+
+            
+            <div class="mt-8 flex flex-col gap-4">
+                <a href="{% url 'share_download' link.link_id %}"
+                    class="relative group overflow-hidden w-full h-16 flex items-center justify-center gap-3 bg-primary text-white font-black tracking-[0.2em] uppercase rounded-xl shadow-[0_0_20px_rgba(244,37,140,0.4)] hover:shadow-[0_0_35px_rgba(244,37,140,0.6)] transition-all">
+                    <span class="material-symbols-outlined text-2xl">download</span>
+                    <span>Download Securely</span>
+                    <div
+                        class="absolute inset-0 bg-white/20 -translate-x-full group-hover:translate-x-0 transition-transform duration-500">
+                    </div>
+                </a>
+                <p class="text-center text-[10px] text-text-muted/50 uppercase tracking-widest">Virus Scan: Passed //
+                    Integrity: Verified</p>
+            </div>
+        </div>
+
+        
+        <div class="text-center opacity-70">
+            <p class="text-xs text-text-muted uppercase tracking-widest">
+                Shared by <span class="text-white font-bold">{{ file.user.username }}</span> // {{
+                file.uploaded_at|date:"M d, Y" }}
+            </p>
+        </div>
+    </div>
+</div>
+
+
+<div id="download-success-toast"
+    class="fixed top-8 left-1/2 -translate-x-1/2 z-50 flex items-center gap-3 px-6 py-4 bg-emerald-500/10 border border-emerald-500/50 rounded-xl backdrop-blur-md shadow-[0_0_30px_rgba(16,185,129,0.2)] opacity-0 pointer-events-none transition-all duration-500 translate-y-[-20px]">
+    <span class="material-symbols-outlined text-emerald-500">check_circle</span>
+    <div class="flex flex-col">
+        <span class="text-sm font-bold text-white uppercase tracking-tight">Download Started</span>
+        <span class="text-xs text-emerald-500/80">Your secure file is being transferred.</span>
+    </div>
+</div>
+
+<style>
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(10px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .animate-fade-in {
+        animation: fadeIn 0.8s ease-out forwards;
+    }
+</style>
+
+<script>
+    function showSuccess() {
+        // Find the button link and ensure it triggers first
+        const toast = document.getElementById('download-success-toast');
+        toast.classList.remove('opacity-0', 'pointer-events-none', 'translate-y-[-20px]');
+
+        // Hide after 5 seconds
+        setTimeout(() => {
+            toast.classList.add('opacity-0', 'pointer-events-none', 'translate-y-[-20px]');
+        }, 5000);
+    }
+
+    // Attach listener to the download link
+    document.querySelector('a[href*="share_download"]').addEventListener('click', showSuccess);
+</script>
+{% endblock %}

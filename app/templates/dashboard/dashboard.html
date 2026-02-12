@@ -1,0 +1,200 @@
+{% extends 'base.html' %}
+
+{% block title %}CloudShare - Dashboard{% endblock %}
+
+{% block content %}
+<div class="flex flex-col gap-8">
+    
+    <div class="flex flex-col md:flex-row md:items-end justify-between gap-6">
+        <div>
+            <h1 class="text-4xl md:text-5xl font-black text-white tracking-tight leading-tight">
+                WELCOME BACK, <br /><span class="text-primary tracking-tighter uppercase">{{ user.username }}</span>
+            </h1>
+            <p class="text-text-muted mt-2 text-lg">
+                System status: <span class="text-emerald-400 font-bold">OPTIMAL</span>. Your secure vault is ready.
+            </p>
+        </div>
+        <div class="flex gap-4">
+            <a href="{% url 'upload' %}"
+                class="flex items-center gap-2 bg-primary hover:bg-primary-hover text-white font-bold h-12 px-6 rounded-lg transition-all shadow-[0_0_15px_rgba(244,37,140,0.3)]">
+                <span class="material-symbols-outlined">upload</span>
+                <span>Upload File</span>
+            </a>
+        </div>
+    </div>
+
+    
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        
+        <div
+            class="bg-surface-dark border border-surface-border rounded-xl p-6 flex flex-col gap-4 group hover:border-primary/50 transition-colors relative overflow-hidden">
+            <div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+                <span class="material-symbols-outlined text-6xl text-white">cloud</span>
+            </div>
+            <div class="flex justify-between items-start relative z-10">
+                <div class="p-3 rounded-lg bg-background-dark text-primary">
+                    <span class="material-symbols-outlined">storage</span>
+                </div>
+                <span class="text-xs font-medium text-text-muted bg-white/5 px-2 py-1 rounded">Vault Status</span>
+            </div>
+            <div class="relative z-10">
+                <div class="flex justify-between items-end mb-2">
+                    <span class="text-3xl font-bold text-white">{{ storage_mb|floatformat:1 }} MB</span>
+                    <span class="text-xs text-text-muted">Used of 1 GB</span>
+                </div>
+                <div class="w-full bg-background-dark h-2 rounded-full overflow-hidden border border-surface-border">
+                    <div class="bg-gradient-to-r from-primary to-purple-600 h-full shadow-[0_0_10px_rgba(244,37,140,0.5)]"
+                        style="width: {% widthratio storage_mb 1024 100 %}%"></div>
+                </div>
+            </div>
+        </div>
+
+        
+        <div
+            class="bg-surface-dark border border-surface-border rounded-xl p-6 flex flex-col gap-4 group hover:border-primary/50 transition-colors relative overflow-hidden">
+            <div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+                <span class="material-symbols-outlined text-6xl text-white">folder</span>
+            </div>
+            <div class="flex justify-between items-start relative z-10">
+                <div class="p-3 rounded-lg bg-background-dark text-primary">
+                    <span class="material-symbols-outlined">description</span>
+                </div>
+            </div>
+            <div class="relative z-10">
+                <p class="text-text-muted text-sm uppercase tracking-wider">Total Files</p>
+                <h3 class="text-4xl font-bold text-white mt-1">{{ total_files }}</h3>
+            </div>
+        </div>
+
+        
+        <div
+            class="bg-surface-dark border border-surface-border rounded-xl p-6 flex flex-col gap-4 group hover:border-primary/50 transition-colors relative overflow-hidden">
+            <div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+                <span class="material-symbols-outlined text-6xl text-white">link</span>
+            </div>
+            <div class="flex justify-between items-start relative z-10">
+                <div class="p-3 rounded-lg bg-background-dark text-primary">
+                    <span class="material-symbols-outlined">share</span>
+                </div>
+                {% if active_links > 0 %}
+                <span class="flex h-2 w-2 rounded-full bg-emerald-400 animate-pulse shadow-[0_0_8px_#34d399]"></span>
+                {% endif %}
+            </div>
+            <div class="relative z-10">
+                <p class="text-text-muted text-sm uppercase tracking-wider">Active Links</p>
+                <h3 class="text-4xl font-bold text-white mt-1">{{ active_links }}</h3>
+            </div>
+        </div>
+    </div>
+
+    
+    <div class="grid grid-cols-1 xl:grid-cols-3 gap-8 mb-8">
+        
+        <div
+            class="xl:col-span-2 bg-surface-dark border border-surface-border rounded-xl overflow-hidden flex flex-col">
+            <div class="flex items-center justify-between p-6 border-b border-surface-border">
+                <div class="flex items-center gap-2">
+                    <div class="w-1 h-6 bg-primary shadow-[0_0_10px_rgba(244,37,140,0.5)]"></div>
+                    <h3 class="text-lg font-bold text-white uppercase tracking-wide">Recent Uploads</h3>
+                </div>
+                <a href="{% url 'file_list' %}"
+                    class="text-xs font-bold text-primary hover:text-white transition-colors uppercase tracking-widest">View
+                    All Files</a>
+            </div>
+            <div class="overflow-x-auto">
+                <table class="w-full text-left border-collapse">
+                    <thead>
+                        <tr
+                            class="text-text-muted text-xs uppercase font-semibold bg-background-dark/50 border-b border-surface-border">
+                            <th class="px-6 py-4">File Status</th>
+                            <th class="px-6 py-4">Size</th>
+                            <th class="px-6 py-4">Timestamp</th>
+                            <th class="px-6 py-4 text-right">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-surface-border">
+                        {% for file in files %}
+                        <tr class="group hover:bg-white/5 transition-colors">
+                            <td class="px-6 py-4">
+                                <div class="flex items-center gap-4">
+                                    <div
+                                        class="size-10 rounded border border-surface-border bg-background-dark flex items-center justify-center text-primary group-hover:border-primary transition-colors">
+                                        <span class="material-symbols-outlined">
+                                            {% if file.original_name|lower|slice:"-4:" == ".pdf" %}picture_as_pdf
+                                            {% elif file.original_name|lower|slice:"-4:" == ".png" or file.original_name|lower|slice:"-4:" == ".jpg" %}image
+                                            {% elif file.original_name|lower|slice:"-4:" == ".zip" %}folder_zip
+                                            {% else %}description{% endif %}
+                                        </span>
+                                    </div>
+                                    <div class="flex flex-col">
+                                        <a href="{% url 'file_detail' file.id %}"
+                                            class="font-bold text-white group-hover:text-primary transition-colors truncate max-w-[200px]">{{ file.original_name }}</a>
+                                        <span class="text-[10px] text-text-muted uppercase tracking-widest">Secure
+                                            Upload</span>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="px-6 py-4 text-sm text-text-muted font-mono">{{ file.size|filesizeformat }}</td>
+                            <td class="px-6 py-4 text-sm text-text-muted">{{ file.uploaded_at|date:"M d, Y" }}</td>
+                            <td class="px-6 py-4 text-right">
+                                <a href="{% url 'file_detail' file.id %}"
+                                    class="text-text-muted hover:text-white transition-colors">
+                                    <span class="material-symbols-outlined text-[20px]">chevron_right</span>
+                                </a>
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="4" class="px-6 py-12 text-center text-text-muted">
+                                <span class="material-symbols-outlined text-4xl mb-2 opacity-20">cloud_off</span>
+                                <p>No files found in your vault.</p>
+                                <a href="{% url 'upload' %}"
+                                    class="text-primary hover:underline mt-2 inline-block">Upload your first file</a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        
+        <div class="bg-surface-dark border border-surface-border rounded-xl p-6 flex flex-col gap-6">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center gap-2">
+                    <div class="w-1 h-6 bg-primary shadow-[0_0_10px_rgba(244,37,140,0.5)]"></div>
+                    <h3 class="text-lg font-bold text-white uppercase tracking-wide">Secure Links</h3>
+                </div>
+                <a href="{% url 'link_list' %}" class="text-xs font-bold text-primary hover:text-white transition-colors uppercase tracking-widest">Manage</a>
+            </div>
+
+            <div class="flex flex-col gap-4">
+                {% if active_links_list %}
+                {% for link in active_links_list %}
+                <div
+                    class="p-4 bg-background-dark border border-surface-border rounded-lg group hover:border-primary/50 transition-colors">
+                    <div class="flex justify-between items-start mb-2">
+                        <div class="flex items-center gap-2">
+                            <span class="material-symbols-outlined text-sm text-primary">link</span>
+                            <span class="text-sm font-bold text-white truncate max-w-[150px]">{{ link.file.original_name }}</span>
+                        </div>
+                        <span
+                            class="text-[8px] font-bold text-primary border border-primary/30 px-1.5 py-0.5 rounded uppercase tracking-tighter">Active</span>
+                    </div>
+                    <div class="flex justify-between items-center text-[10px] text-text-muted uppercase tracking-wider">
+                        <span>Expires: {{ link.expires_at|timeuntil }}</span>
+                        <a href="{% url 'share_page' link.link_id %}" class="text-primary hover:underline">Page</a>
+                    </div>
+                </div>
+                {% endfor %}
+                {% else %}
+                <div class="flex flex-col items-center justify-center p-8 text-center bg-background-dark/50 rounded-lg border border-dashed border-surface-border">
+                    <span class="material-symbols-outlined text-3xl text-text-muted/30 mb-2">link_off</span>
+                    <p class="text-xs text-text-muted">No active share links.</p>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

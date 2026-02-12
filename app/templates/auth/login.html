@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html class="dark" lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+  <title>CloudShare Login</title>
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
+    rel="stylesheet" />
+  <link href="https://fonts.googleapis.com" rel="preconnect" />
+  <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Rajdhani:wght@300;400;500;600;700&display=swap"
+    rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "cyber-cyan": "#00f0ff",
+            "electric-pink": "#ff0099",
+            "void-black": "#0a0a0a",
+            "dark-metal": "#121212",
+            "surface-panel": "#1a1a1e",
+          },
+          fontFamily: {
+            "display": ["Orbitron", "sans-serif"],
+            "body": ["Rajdhani", "sans-serif"]
+          },
+        },
+      },
+    }
+  </script>
+  <style type="text/tailwindcss">
+    @layer utilities {
+            .text-glow-pink {
+                text-shadow: 0 0 10px rgba(255, 0, 153, 0.6);
+            }
+            .clip-path-polygon {
+                clip-path: polygon(0 0, 100% 0, 100% calc(100% - 20px), calc(100% - 20px) 100%, 0 100%);
+            }
+            .clip-path-input {
+                clip-path: polygon(0 0, 100% 0, 100% 100%, 10px 100%, 0 calc(100% - 10px));
+            }
+        }
+    </style>
+</head>
+
+<body
+  class="bg-void-black min-h-screen flex flex-col font-body antialiased text-white overflow-hidden selection:bg-electric-pink selection:text-white">
+  <div class="fixed inset-0 pointer-events-none z-0">
+    <div class="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(255,0,153,0.05)_0%,transparent_50%)]"></div>
+    <div
+      class="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[500px] bg-electric-pink/5 blur-[120px] rounded-full">
+    </div>
+  </div>
+
+  <div class="relative flex min-h-screen w-full flex-col justify-center items-center p-4 z-10">
+    <div class="relative w-full max-w-[500px] group">
+      <div
+        class="absolute -inset-0.5 bg-gradient-to-r from-electric-pink to-cyber-cyan rounded-none blur opacity-20 group-hover:opacity-40 transition duration-1000">
+      </div>
+      <div class="relative bg-dark-metal border border-white/10 p-1 flex flex-col backdrop-blur-xl clip-path-polygon">
+        <div class="bg-dark-metal/95 p-8 md:p-10 relative overflow-hidden">
+          <div class="flex flex-col items-center justify-center pt-2 pb-6">
+            <div class="relative flex items-center justify-center w-16 h-16 mb-4">
+              <div class="absolute inset-0 bg-electric-pink/20 rounded-full blur-md animate-pulse"></div>
+              <span
+                class="material-symbols-outlined text-5xl text-electric-pink relative z-10 text-glow-pink">cloud_circle</span>
+            </div>
+            <span class="font-display text-3xl font-bold tracking-widest uppercase text-white text-glow-pink">
+              Cloud<span class="text-electric-pink">Share</span>
+            </span>
+          </div>
+
+          {% if messages %}
+          <div class="mb-6 space-y-2">
+            {% for message in messages %}
+            <div
+              class="p-3 rounded bg-red-500/10 border border-red-500/20 text-red-400 text-xs font-bold uppercase tracking-widest flex items-center gap-2">
+              <span class="material-symbols-outlined text-sm">error</span>
+              {{ message }}
+            </div>
+            {% endfor %}
+          </div>
+          {% endif %}
+
+          <form method="POST" action="{% url 'login' %}" class="flex flex-col gap-6">
+            {% csrf_token %}
+            <div class="group/input relative">
+              <label
+                class="block text-electric-pink text-xs font-display font-bold uppercase tracking-widest mb-2 ml-1">Identity
+                Code / Username</label>
+              <div class="relative flex items-center">
+                <input name="username" required
+                  class="w-full bg-surface-panel/80 text-white border-none focus:ring-1 focus:ring-cyber-cyan h-14 px-4 pl-12 font-mono text-sm placeholder:text-gray-600 transition-all clip-path-input"
+                  placeholder="USERNAME" type="text" />
+                <div
+                  class="absolute left-0 top-0 bottom-0 w-10 flex items-center justify-center border-r border-white/10 text-gray-500 group-focus-within/input:text-cyber-cyan transition-colors">
+                  <span class="material-symbols-outlined text-[20px]">person</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="group/input relative">
+              <label
+                class="block text-electric-pink text-xs font-display font-bold uppercase tracking-widest mb-2 ml-1">Security
+                Key</label>
+              <div class="relative flex items-center">
+                <input name="password" required
+                  class="w-full bg-surface-panel/80 text-white border-none focus:ring-1 focus:ring-cyber-cyan h-14 px-4 pl-12 font-mono text-sm placeholder:text-gray-600 transition-all clip-path-input"
+                  placeholder="••••••••••••" type="password" />
+                <div
+                  class="absolute left-0 top-0 bottom-0 w-10 flex items-center justify-center border-r border-white/10 text-gray-500 group-focus-within/input:text-cyber-cyan transition-colors">
+                  <span class="material-symbols-outlined text-[20px]">vpn_key</span>
+                </div>
+              </div>
+            </div>
+
+            <button type="submit"
+              class="relative group overflow-hidden w-full h-14 mt-4 bg-transparent border border-cyber-cyan text-cyber-cyan font-display font-bold tracking-[0.15em] uppercase hover:text-black transition-all duration-300">
+              <span
+                class="absolute inset-0 w-full h-full bg-cyber-cyan transform -skew-x-12 -translate-x-full group-hover:translate-x-0 transition-transform duration-300 ease-out"></span>
+              <div class="relative flex items-center justify-center gap-3 z-10">
+                <span class="material-symbols-outlined text-[20px]">lock_open</span>
+                <span>Authenticate</span>
+              </div>
+            </button>
+          </form>
+
+          <div class="flex justify-center items-center gap-2 mt-4 border-t border-white/5 pt-6">
+            <p class="text-gray-500 text-sm font-medium">New terminal detected?</p>
+            <a class="text-electric-pink hover:text-white transition-colors font-display font-bold uppercase tracking-wide text-sm"
+              href="{% url 'register' %}">Initialize Protocol</a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="mt-8 flex gap-8 z-10">
+      <a class="text-gray-500 text-xs font-mono hover:text-cyber-cyan transition-colors uppercase tracking-widest"
+        href="{% url 'home' %}">[ Return_Home ]</a>
+    </div>
+  </div>
+  
+  <div id="global-loader"
+    class="fixed inset-0 z-[100] flex items-center justify-center bg-void-black/80 backdrop-blur-sm transition-opacity duration-300 pointer-events-none opacity-0"
+    aria-hidden="true">
+    <div class="flex flex-col items-center gap-4">
+      <div class="relative size-16">
+        <div class="absolute inset-0 rounded-full border-4 border-surface-panel"></div>
+        <div class="absolute inset-0 rounded-full border-4 border-electric-pink border-t-transparent animate-spin">
+        </div>
+      </div>
+      <p class="text-sm font-bold text-white uppercase tracking-widest animate-pulse font-display">Authenticating</p>
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const loader = document.getElementById('global-loader');
+
+      const showLoader = () => {
+        loader.classList.remove('opacity-0', 'pointer-events-none');
+        loader.setAttribute('aria-hidden', 'false');
+      };
+
+      const hideLoader = () => {
+        loader.classList.add('opacity-0', 'pointer-events-none');
+        loader.setAttribute('aria-hidden', 'true');
+      };
+
+      document.addEventListener('click', (e) => {
+        const link = e.target.closest('a');
+        if (link) {
+          const href = link.getAttribute('href');
+          if (!href || href.startsWith('#') || href.startsWith('javascript:')) return;
+          showLoader();
+        }
+      }, true);
+
+      document.addEventListener('submit', (e) => {
+        showLoader();
+      });
+
+      window.addEventListener('pageshow', (e) => {
+        if (e.persisted) {
+          hideLoader();
+        }
+      });
+    });
+  </script>
+</body>
+
+</html>

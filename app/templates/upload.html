@@ -1,0 +1,119 @@
+{% extends 'base.html' %}
+
+{% block title %}CloudShare - Upload Files{% endblock %}
+
+{% block content %}
+<div class="flex flex-col gap-10">
+    
+    <div class="flex flex-col md:flex-row md:items-end justify-between gap-6 border-b border-surface-border pb-8">
+        <div class="flex flex-col gap-1">
+            <div class="flex items-center gap-2 mb-2">
+                <span class="w-2 h-2 bg-primary animate-pulse rounded-full"></span>
+                <span class="text-xs font-mono text-primary tracking-[0.2em] uppercase">System Status: Optimal</span>
+            </div>
+            <h1 class="text-white text-4xl md:text-5xl font-black leading-none tracking-tight uppercase">Data Transfer
+                <span class="text-primary">Portal</span></h1>
+            <p class="text-text-muted font-mono text-sm mt-2 max-w-lg">Initiate secure uplink protocols. All files
+                encrypted end-to-end.</p>
+        </div>
+    </div>
+
+    
+    <div class="max-w-4xl mx-auto w-full">
+        <form action="{% url 'upload' %}" method="POST" enctype="multipart/form-data" class="flex flex-col gap-8">
+            {% csrf_token %}
+
+            
+            <label for="file-upload"
+                class="group relative flex flex-col items-center justify-center w-full h-80 border-2 border-dashed border-surface-border rounded-xl bg-surface-dark/50 hover:bg-primary/5 hover:border-primary/50 transition-all cursor-pointer overflow-hidden backdrop-blur-sm">
+                <div
+                    class="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(244,37,140,0.05)_0%,transparent_70%)]">
+                </div>
+
+                
+                <div
+                    class="absolute top-0 left-0 w-4 h-4 border-l-2 border-t-2 border-primary/30 group-hover:border-primary transition-colors">
+                </div>
+                <div
+                    class="absolute top-0 right-0 w-4 h-4 border-r-2 border-t-2 border-primary/30 group-hover:border-primary transition-colors">
+                </div>
+                <div
+                    class="absolute bottom-0 left-0 w-4 h-4 border-l-2 border-b-2 border-primary/30 group-hover:border-primary transition-colors">
+                </div>
+                <div
+                    class="absolute bottom-0 right-0 w-4 h-4 border-r-2 border-b-2 border-primary/30 group-hover:border-primary transition-colors">
+                </div>
+
+                <div class="flex flex-col items-center justify-center text-center px-4 relative z-10">
+                    <div class="mb-6 relative">
+                        <div class="absolute inset-0 bg-primary/20 blur-xl rounded-full"></div>
+                        <div
+                            class="relative text-primary p-6 border border-primary/30 bg-background-dark rounded-full group-hover:scale-110 transition-transform duration-300">
+                            <span class="material-symbols-outlined text-6xl">cloud_upload</span>
+                        </div>
+                    </div>
+                    <p class="mb-2 text-2xl font-black text-white tracking-widest uppercase">Select Vector</p>
+                    <p class="text-text-muted font-mono text-xs uppercase tracking-widest mt-2">Maximum individual file
+                        size: 100MB</p>
+
+                    
+                    <div id="file-info"
+                        class="hidden mt-6 p-4 bg-background-dark/80 border border-primary/50 rounded-lg animate-fade-in">
+                        <div class="flex items-center gap-3">
+                            <span class="material-symbols-outlined text-primary">description</span>
+                            <span id="file-name" class="text-white font-bold font-mono text-sm"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <input id="file-upload" name="file" type="file" class="hidden" required
+                    onchange="updateFileInfo(this)" />
+            </label>
+
+            
+            <div class="flex justify-center">
+                <button type="submit"
+                    class="relative group overflow-hidden w-full max-w-sm h-16 flex items-center justify-center gap-3 bg-primary text-white font-black tracking-[0.2em] uppercase rounded-lg shadow-[0_0_20px_rgba(244,37,140,0.4)] hover:shadow-[0_0_35px_rgba(244,37,140,0.6)] transition-all">
+                    <span class="material-symbols-outlined text-2xl">rocket_launch</span>
+                    <span>Execute Uplink</span>
+                    <div
+                        class="absolute inset-0 bg-white/20 -translate-x-full group-hover:translate-x-0 transition-transform duration-500">
+                    </div>
+                </button>
+            </div>
+        </form>
+    </div>
+
+    
+    <div
+        class="flex flex-col md:flex-row justify-between items-center gap-6 px-4 py-8 border-t border-surface-border mt-10">
+        <div class="flex items-center gap-6">
+            <div class="flex items-center gap-2">
+                <span class="material-symbols-outlined text-primary">verified_user</span>
+                <span class="text-[10px] font-bold text-text-muted uppercase tracking-widest">End-to-End
+                    Encrypted</span>
+            </div>
+            <div class="flex items-center gap-2">
+                <span class="material-symbols-outlined text-primary">speed</span>
+                <span class="text-[10px] font-bold text-text-muted uppercase tracking-widest">Quantum
+                    Acceleration</span>
+            </div>
+        </div>
+        <div class="text-[10px] font-mono text-text-muted/50 uppercase">Session_ID: {{ user.id|stringformat:"05d" }} //
+            Protocol: CLOUDSHARE_SECURE_V2</div>
+    </div>
+</div>
+
+<script>
+    function updateFileInfo(input) {
+        const info = document.getElementById('file-info');
+        const name = document.getElementById('file-name');
+        if (input.files && input.files[0]) {
+            name.textContent = input.files[0].name;
+            info.classList.remove('hidden');
+        } else {
+            info.classList.add('hidden');
+        }
+    }
+</script>
+{% endblock %}

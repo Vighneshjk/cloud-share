@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+{% load static %}
+<html class="dark" lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>{% block title %}CloudShare - Secure Dashboard{% endblock %}</title>
+    
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    
+    <link href="https://fonts.googleapis.com" rel="preconnect" />
+    <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect" />
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet" />
+    
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
+        rel="stylesheet" />
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#f4258c",
+                        "primary-hover": "#d11f78",
+                        "background-light": "#f8f5f7",
+                        "background-dark": "#0a0a0a",
+                        "surface-dark": "#161616",
+                        "surface-border": "#333333",
+                        "text-muted": "#cb90ad",
+                    },
+                    fontFamily: {
+                        "display": ["Space Grotesk", "sans-serif"]
+                    },
+                    borderRadius: { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px" },
+                },
+            },
+        }
+    </script>
+    <style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            font-size: 24px;
+        }
+
+        .material-symbols-outlined.fill {
+            font-variation-settings: 'FILL' 1;
+        }
+
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #0a0a0a;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #333;
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #f4258c;
+        }
+    </style>
+    {% block extra_css %}{% endblock %}
+</head>
+
+<body
+    class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-white font-display overflow-hidden h-screen flex flex-col">
+    
+    <header
+        class="flex items-center justify-between whitespace-nowrap border-b border-surface-border bg-background-dark/95 backdrop-blur-sm px-6 py-3 shrink-0 z-20">
+        <div class="flex items-center gap-8">
+            <a class="flex items-center gap-3 text-white hover:opacity-80 transition-opacity" href="{% url 'home' %}">
+                <div class="size-8 text-primary">
+                    <svg class="w-full h-full" fill="none" viewbox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+                        <path
+                            d="M8.57829 8.57829C5.52816 11.6284 3.451 15.5145 2.60947 19.7452C1.76794 23.9758 2.19984 28.361 3.85056 32.3462C5.50128 36.3314 8.29667 39.7376 11.8832 42.134C15.4698 44.5305 19.6865 45.8096 24 45.8096C28.3135 45.8096 32.5302 44.5305 36.1168 42.134C39.7033 39.7375 42.4987 36.3314 44.1494 32.3462C45.8002 28.361 46.2321 23.9758 45.3905 19.7452C44.549 15.5145 42.4718 11.6284 39.4217 8.57829L24 24L8.57829 8.57829Z"
+                            fill="currentColor"></path>
+                    </svg>
+                </div>
+                <h2 class="text-white text-xl font-bold leading-tight tracking-[-0.015em]">CloudShare</h2>
+            </a>
+            {% if user.is_authenticated %}
+            <form action="{% url 'file_list' %}" method="GET" class="hidden md:flex min-w-40 w-64 lg:w-96">
+                <div
+                    class="flex flex-1 items-stretch rounded-lg bg-surface-dark border border-transparent focus-within:border-primary/50 transition-colors">
+                    <div class="text-text-muted flex items-center justify-center pl-4">
+                        <span class="material-symbols-outlined text-[20px]">search</span>
+                    </div>
+                    <input name="search"
+                        class="w-full bg-transparent border-none text-white focus:ring-0 px-4 pl-2 text-sm"
+                        placeholder="Search files..." value="{{ request.GET.search }}" />
+                </div>
+            </form>
+            {% endif %}
+        </div>
+        <div class="flex items-center justify-end gap-6">
+            {% if user.is_authenticated %}
+            <a href="{% url 'upload' %}"
+                class="hidden sm:flex items-center gap-2 rounded-lg h-10 px-6 bg-primary hover:bg-primary-hover transition-all text-white text-sm font-bold shadow-neon">
+                <span class="material-symbols-outlined text-[20px]">cloud_upload</span>
+                <span>Upload</span>
+            </a>
+            <div class="flex items-center gap-3 pl-4 border-l border-surface-border">
+                <div class="flex flex-col items-end hidden md:block">
+                    <span class="text-sm font-bold text-white leading-none">{{ user.username }}</span>
+                    <span class="text-xs text-text-muted">User Profile</span>
+                </div>
+                <a href="{% url 'profile' %}"
+                    class="rounded-full size-10 border-2 border-surface-border hover:border-primary transition-colors bg-cover bg-center overflow-hidden">
+                    {% if user.profile.avatar %}
+                    <img src="{{ user.profile.avatar.url }}" alt="Avatar" class="size-full object-cover">
+                    {% else %}
+                    <img src="https://avatar.iran.liara.run/public/{{ user.id }}" alt="Avatar"
+                        class="size-full object-cover">
+                    {% endif %}
+                </a>
+                <form action="{% url 'logout' %}" method="POST" class="ml-2">
+                    {% csrf_token %}
+                    <button type="submit" class="p-2 text-text-muted hover:text-red-400 transition-colors"
+                        title="Logout">
+                        <span class="material-symbols-outlined">logout</span>
+                    </button>
+                </form>
+            </div>
+            {% else %}
+            <a href="{% url 'login' %}"
+                class="text-sm font-bold text-white hover:text-primary transition-colors">Login</a>
+            <a href="{% url 'register' %}"
+                class="rounded-lg bg-primary px-6 py-2 text-sm font-bold text-white shadow-neon hover:bg-primary-hover transition-all">Sign
+                Up</a>
+            {% endif %}
+        </div>
+    </header>
+
+    <div class="flex flex-1 overflow-hidden">
+        {% if user.is_authenticated %}
+        <aside
+            class="hidden md:flex flex-col w-64 bg-background-dark border-r border-surface-border shrink-0 justify-between">
+            <div class="flex flex-col gap-4 p-4">
+                <p class="px-3 text-xs font-bold text-text-muted uppercase tracking-wider">Menu</p>
+                <nav class="flex flex-col gap-1">
+                    <a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-text-muted hover:bg-surface-dark hover:text-white transition-all"
+                        href="{% url 'dashboard' %}">
+                        <span class="material-symbols-outlined">dashboard</span>
+                        <span class="text-sm font-medium">Dashboard</span>
+                    </a>
+                    <a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-text-muted hover:bg-surface-dark hover:text-white transition-all"
+                        href="{% url 'profile' %}">
+                        <span class="material-symbols-outlined">person</span>
+                        <span class="text-sm font-medium">My Profile</span>
+                    </a>
+                    <a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-text-muted hover:bg-surface-dark hover:text-white transition-all"
+                        href="{% url 'downloader' %}">
+                        <span class="material-symbols-outlined">cloud_download</span>
+                        <span class="text-sm font-medium">Download Files</span>
+                    </a>
+                    <a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-text-muted hover:bg-surface-dark hover:text-white transition-all"
+                        href="{% url 'file_list' %}">
+                        <span class="material-symbols-outlined">folder_open</span>
+                        <span class="text-sm font-medium">My Files</span>
+                    </a>
+                    <a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-text-muted hover:bg-surface-dark hover:text-white transition-all"
+                        href="{% url 'link_list' %}">
+                        <span class="material-symbols-outlined">share</span>
+                        <span class="text-sm font-medium">Shared Links</span>
+                    </a>
+                    {% if user.is_superuser %}
+                    <a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-text-muted hover:bg-surface-dark hover:text-white transition-all"
+                        href="{% url 'admin_dashboard' %}">
+                        <span class="material-symbols-outlined">admin_panel_settings</span>
+                        <span class="text-sm font-medium">Admin Panel</span>
+                    </a>
+                    {% endif %}
+                </nav>
+            </div>
+            <div class="p-4 border-t border-surface-border">
+                <form action="{% url 'logout' %}" method="POST">
+                    {% csrf_token %}
+                    <button type="submit"
+                        class="flex items-center gap-3 w-full px-3 py-2.5 rounded-lg hover:bg-red-500/10 text-text-muted hover:text-red-400 transition-all">
+                        <span class="material-symbols-outlined">logout</span>
+                        <span class="text-sm font-medium">Logout</span>
+                    </button>
+                </form>
+            </div>
+        </aside>
+        {% endif %}
+
+        <main class="flex-1 flex flex-col overflow-y-auto bg-background-dark">
+            <div class="flex-1 p-8 max-w-7xl w-full mx-auto">
+                {% if messages %}
+                <div class="mb-6 space-y-2">
+                    {% for message in messages %}
+                    <div
+                        class="p-4 rounded-lg bg-surface-dark border border-primary/50 text-primary text-sm font-medium backdrop-blur-md">
+                        {{ message }}
+                    </div>
+                    {% endfor %}
+                </div>
+                {% endif %}
+                {% block content %}{% endblock %}
+            </div>
+            <footer class="mt-auto border-t border-surface-border py-8 text-center bg-background-dark/50">
+                <p class="text-text-muted/50 text-xs">© 2024 CloudShare Secure Systems. All rights reserved.</p>
+            </footer>
+        </main>
+    </div>
+
+    
+    <div class="fixed inset-0 pointer-events-none -z-10 overflow-hidden">
+        <div class="absolute top-[-10%] right-[-5%] w-[500px] h-[500px] bg-primary/5 rounded-full blur-[120px]"></div>
+        <div class="absolute bottom-[-10%] left-[-5%] w-[600px] h-[600px] bg-blue-500/5 rounded-full blur-[150px]">
+        </div>
+    </div>
+    {% block extra_js %}{% endblock %}
+    
+    <div id="global-loader"
+        class="fixed inset-0 z-[100] flex items-center justify-center bg-background-dark/80 backdrop-blur-sm transition-opacity duration-300 pointer-events-none opacity-0"
+        aria-hidden="true">
+        <div class="flex flex-col items-center gap-4">
+            <div class="relative size-16">
+                <div class="absolute inset-0 rounded-full border-4 border-surface-border"></div>
+                <div class="absolute inset-0 rounded-full border-4 border-primary border-t-transparent animate-spin">
+                </div>
+            </div>
+            <p class="text-sm font-bold text-white uppercase tracking-widest animate-pulse">Loading</p>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const loader = document.getElementById('global-loader');
+
+            const showLoader = () => {
+                loader.classList.remove('opacity-0', 'pointer-events-none');
+                loader.setAttribute('aria-hidden', 'false');
+            };
+
+            const hideLoader = () => {
+                loader.classList.add('opacity-0', 'pointer-events-none');
+                loader.setAttribute('aria-hidden', 'true');
+            };
+
+            // Handle standard links
+            document.addEventListener('click', (e) => {
+                const link = e.target.closest('a');
+                if (!link) return;
+
+                const href = link.getAttribute('href');
+                const target = link.getAttribute('target');
+
+                // Ignore specific cases
+                if (
+                    !href ||
+                    href.startsWith('#') ||
+                    href.startsWith('javascript:') ||
+                    href.startsWith('mailto:') ||
+                    href.startsWith('tel:') ||
+                    target === '_blank' ||
+                    e.ctrlKey || e.metaKey || e.shiftKey || e.altKey
+                ) return;
+
+                // Don't show for download links if possible to detect (usually logic needs specific class)
+                if (link.hasAttribute('download')) return;
+
+                showLoader();
+            });
+
+            // Handle form submissions
+            document.addEventListener('submit', (e) => {
+                const form = e.target;
+                if (!form.checkValidity()) return;
+                if (form.target === '_blank') return;
+
+                showLoader();
+            });
+
+            // Handle existing onclick navigations (manual specific check)
+            // This is a helper for elements that act as links but aren't <a> tags
+            document.addEventListener('click', (e) => {
+                const clickable = e.target.closest('[onclick*="location"]');
+                if (clickable && !e.ctrlKey && !e.metaKey) {
+                    showLoader();
+                }
+            });
+
+            // Hide on back/forward cache
+            window.addEventListener('pageshow', (e) => {
+                if (e.persisted) {
+                    hideLoader();
+                }
+            });
+        });
+    </script>
+</body>
+
+</html>

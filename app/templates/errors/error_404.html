@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+
+{% block title %}404 - Vector Not Found{% endblock %}
+
+{% block content %}
+<div class="flex flex-col items-center justify-center min-h-[60vh] text-center">
+    <div class="relative mb-8">
+        <h1 class="text-[12rem] font-black text-primary/10 tracking-tighter leading-none select-none">404</h1>
+        <div class="absolute inset-0 flex items-center justify-center">
+            <span class="material-symbols-outlined text-8xl text-primary animate-pulse">error</span>
+        </div>
+    </div>
+    <h2 class="text-4xl font-black text-white uppercase tracking-tight mb-4">Vector Lost in <span
+            class="text-primary">Cyberspace</span></h2>
+    <p class="text-text-muted text-lg max-w-md mx-auto mb-10">The data packet you are looking for has been purged or
+        never existed in this sector.</p>
+
+    <div class="flex gap-6">
+        <a href="{% url 'dashboard' %}"
+            class="px-8 py-3 bg-primary text-white font-black uppercase tracking-widest rounded-lg shadow-[0_0_20px_rgba(244,37,140,0.4)] hover:shadow-[0_0_30px_rgba(244,37,140,0.6)] transition-all flex items-center gap-2">
+            <span class="material-symbols-outlined">dashboard</span>
+            Return to Nexus
+        </a>
+        <a href="{% url 'home' %}"
+            class="px-8 py-3 bg-surface-dark border border-surface-border text-white font-black uppercase tracking-widest rounded-lg hover:border-primary transition-all flex items-center gap-2">
+            <span class="material-symbols-outlined">home</span>
+            Landing Page
+        </a>
+    </div>
+
+    
+    <div class="mt-12 opacity-50">
+        <p class="text-[10px] font-mono text-text-muted uppercase tracking-[0.5em]">Error_Code: ERR_VECTOR_NULL //
+            Sector: 0x404</p>
+    </div>
+</div>
+{% endblock %}

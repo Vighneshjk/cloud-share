@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+
+{% block title %}500 - System Critical Failure{% endblock %}
+
+{% block content %}
+<div class="flex flex-col items-center justify-center min-h-[60vh] text-center">
+  <div class="relative mb-8">
+    <h1 class="text-[12rem] font-black text-red-500/10 tracking-tighter leading-none select-none">500</h1>
+    <div class="absolute inset-0 flex items-center justify-center">
+      <span class="material-symbols-outlined text-8xl text-red-500 animate-ping">report_problem</span>
+    </div>
+  </div>
+  <h2 class="text-4xl font-black text-white uppercase tracking-tight mb-4">Core <span class="text-red-500">Breach</span>
+    Detected</h2>
+  <p class="text-text-muted text-lg max-w-md mx-auto mb-10">The system encountered a critical exception. Security
+    protocols are re-initializing.</p>
+
+  <div class="flex flex-col gap-4">
+    <a href="{% url 'dashboard' %}"
+      class="px-8 py-3 bg-red-500 text-white font-black uppercase tracking-widest rounded-lg shadow-[0_0_20px_rgba(239,68,68,0.4)] hover:shadow-[0_0_30px_rgba(239,68,68,0.6)] transition-all flex items-center gap-2">
+      <span class="material-symbols-outlined">restart_alt</span>
+      Restart Session
+    </a>
+    <p class="text-[10px] text-text-muted/50 uppercase tracking-widest">Technicians have been alerted of this anomaly.
+    </p>
+  </div>
+
+  
+  <div class="mt-12 opacity-50">
+    <p class="text-[10px] font-mono text-red-500 uppercase tracking-[0.5em]">Error_Code: ERR_CORE_FAULT // Status: 500
+    </p>
+  </div>
+</div>
+{% endblock %}

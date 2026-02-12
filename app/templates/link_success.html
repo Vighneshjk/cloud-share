@@ -1,0 +1,93 @@
+{% extends 'base.html' %}
+
+{% block title %}Link Created - CloudShare{% endblock %}
+
+{% block content %}
+<div class="flex flex-col items-center justify-center min-h-[70vh] py-12">
+    <div class="max-w-xl w-full flex flex-col gap-8">
+        
+        <div class="text-center">
+            <div
+                class="inline-flex items-center justify-center size-20 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-500 mb-6 shadow-[0_0_20px_rgba(16,185,129,0.2)]">
+                <span class="material-symbols-outlined text-4xl">check_circle</span>
+            </div>
+            <h1 class="text-4xl font-black text-white tracking-tight uppercase leading-none">Link <span
+                    class="text-primary">Generated</span></h1>
+            <p class="text-text-muted mt-4 text-lg">Uplink protocol initialized. Ready for transmission.</p>
+        </div>
+
+        
+        <div class="bg-surface-dark border border-surface-border rounded-2xl shadow-2xl p-8 relative overflow-hidden">
+            <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-primary to-purple-600"></div>
+
+            <div class="space-y-6">
+                
+                <div class="space-y-2">
+                    <label class="text-[10px] font-bold text-text-muted uppercase tracking-[0.2em] ml-1">Secure Uplink
+                        URL</label>
+                    <div class="relative group">
+                        <input id="share-url" readonly
+                            value="{{ request.scheme }}://{{ request.get_host }}{% url 'share_page' link.link_id %}"
+                            class="w-full bg-background-dark border border-surface-border text-white font-mono text-sm rounded-lg h-14 pl-12 pr-4 focus:ring-1 focus:ring-primary focus:border-primary transition-all selection:bg-primary/30" />
+                        <span
+                            class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-primary">link</span>
+                    </div>
+                </div>
+
+                
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="bg-background-dark/50 border border-surface-border rounded-lg p-4">
+                        <p class="text-[10px] font-bold text-text-muted uppercase tracking-widest mb-1">Target Vector
+                        </p>
+                        <p class="text-white font-bold truncate">{{ file.original_name }}</p>
+                    </div>
+                    <div class="bg-background-dark/50 border border-surface-border rounded-lg p-4">
+                        <p class="text-[10px] font-bold text-text-muted uppercase tracking-widest mb-1">Auto-Destruct
+                        </p>
+                        <p class="text-white font-bold">In {{ link.expires_at|timeuntil }}</p>
+                    </div>
+                </div>
+
+                
+                <button onclick="copyLink()"
+                    class="relative group overflow-hidden w-full h-16 flex items-center justify-center gap-3 bg-primary text-white font-black tracking-[0.2em] uppercase rounded-xl shadow-[0_0_20px_rgba(244,37,140,0.4)] hover:shadow-[0_0_35px_rgba(244,37,140,0.6)] transition-all">
+                    <span class="material-symbols-outlined text-2xl">content_copy</span>
+                    <span id="copy-text">Copy to Buffer</span>
+                    <div
+                        class="absolute inset-0 bg-white/20 -translate-x-full group-hover:translate-x-0 transition-transform duration-500">
+                    </div>
+                </button>
+            </div>
+        </div>
+
+        
+        <div class="flex items-center justify-center gap-8 pt-4">
+            <a href="{% url 'dashboard' %}"
+                class="text-xs font-bold text-text-muted hover:text-white uppercase tracking-widest transition-colors flex items-center gap-2">
+                <span class="material-symbols-outlined text-sm">dashboard</span>
+                Return to Nexus
+            </a>
+            <div class="h-4 w-px bg-surface-border"></div>
+            <a href="{% url 'file_list' %}"
+                class="text-xs font-bold text-text-muted hover:text-white uppercase tracking-widest transition-colors flex items-center gap-2">
+                <span class="material-symbols-outlined text-sm">folder_open</span>
+                Manage Vectors
+            </a>
+        </div>
+    </div>
+</div>
+
+<script>
+    function copyLink() {
+        const urlInput = document.getElementById('share-url');
+        const copyText = document.getElementById('copy-text');
+
+        navigator.clipboard.writeText(urlInput.value).then(() => {
+            copyText.textContent = 'Copied!';
+            setTimeout(() => {
+                copyText.textContent = 'Copy to Buffer';
+            }, 2000);
+        });
+    }
+</script>
+{% endblock %}

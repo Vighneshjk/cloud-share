@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html class="dark" lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>CloudShare - Registration</title>
+    <link href="https://fonts.googleapis.com" rel="preconnect" />
+    <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;900&family=Rajdhani:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
+        rel="stylesheet" />
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#ff00cc",
+                        "accent-blue": "#00f0ff",
+                        "background-dark": "#0a0a0a",
+                        "card-dark": "#121212",
+                        "surface-dark": "#1a1a1e",
+                    },
+                    fontFamily: {
+                        "tech": ["Orbitron", "sans-serif"],
+                        "display": ["Rajdhani", "sans-serif"],
+                    },
+                },
+            },
+        }
+    </script>
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .clip-path-polygon {
+                clip-path: polygon(0 0, 100% 0, 100% calc(100% - 20px), calc(100% - 20px) 100%, 0 100%);
+            }
+            .glow-text {
+                text-shadow: 0 0 10px rgba(0, 240, 255, 0.7);
+            }
+        }
+    </style>
+</head>
+
+<body
+    class="bg-background-dark text-zinc-300 font-display antialiased min-h-screen flex flex-col overflow-x-hidden selection:bg-primary selection:text-white">
+    <div class="fixed inset-0 pointer-events-none z-0">
+        <div class="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(0,240,255,0.05)_0%,transparent_50%)]">
+        </div>
+    </div>
+
+    <header class="sticky top-0 z-50 w-full border-b border-white/10 bg-background-dark/80 backdrop-blur-md">
+        <div class="px-4 md:px-10 py-4 flex items-center justify-between mx-auto max-w-7xl">
+            <a href="{% url 'home' %}" class="flex items-center gap-3 group cursor-pointer">
+                <div
+                    class="size-9 text-accent-blue group-hover:drop-shadow-[0_0_8px_rgba(0,240,255,0.8)] transition-all">
+                    <svg class="w-full h-full" fill="none" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+                        <path
+                            d="M8.57829 8.57829C5.52816 11.6284 3.451 15.5145 2.60947 19.7452C1.76794 23.9758 2.19984 28.361 3.85056 32.3462C5.50128 36.3314 8.29667 39.7376 11.8832 42.134C15.4698 44.5305 19.6865 45.8096 24 45.8096C28.3135 45.8096 32.5302 44.5305 36.1168 42.134C39.7033 39.7375 42.4987 36.3314 44.1494 32.3462C45.8002 28.361 46.2321 23.9758 45.3905 19.7452C44.549 15.5145 42.4718 11.6284 39.4217 8.57829L24 24L8.57829 8.57829Z"
+                            fill="currentColor"></path>
+                    </svg>
+                </div>
+                <h2 class="text-white text-xl font-tech font-bold tracking-widest uppercase glow-text">Cloud<span
+                        class="text-primary">Share</span></h2>
+            </a>
+            <div class="flex items-center gap-4">
+                <span class="text-xs font-display uppercase tracking-widest text-zinc-500 hidden sm:block">Account
+                    Exists?</span>
+                <a href="{% url 'login' %}"
+                    class="flex items-center justify-center rounded-sm h-9 px-6 border border-primary/50 bg-primary/5 hover:bg-primary/20 text-primary text-xs font-tech font-bold uppercase tracking-wider transition-all">
+                    Log In
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <main class="flex-1 flex justify-center py-8 sm:py-12 px-4 sm:px-6 lg:px-8 relative z-10">
+        <div class="w-full md:max-w-[500px] flex-shrink-0 mx-auto">
+            <div class="relative group">
+                <div
+                    class="absolute -inset-0.5 bg-gradient-to-b from-primary to-accent-blue rounded-lg blur opacity-20 group-hover:opacity-40 transition duration-1000">
+                </div>
+                <div
+                    class="relative bg-card-dark/95 backdrop-blur-xl rounded-lg border border-white/5 p-8 sm:p-10 shadow-2xl clip-path-polygon">
+                    <div class="mb-10 text-center">
+                        <h1 class="text-white text-3xl font-tech font-bold uppercase tracking-wider mb-2 glow-text">
+                            Initialize ID</h1>
+                        <p class="text-zinc-400 font-display text-lg tracking-wide">Begin secure sequence.</p>
+                    </div>
+
+                    {% if messages %}
+                    <div class="mb-6 space-y-2">
+                        {% for message in messages %}
+                        <div
+                            class="p-3 rounded bg-red-500/10 border border-red-500/20 text-red-400 text-xs font-bold uppercase tracking-widest flex items-center gap-2">
+                            <span class="material-symbols-outlined text-sm">error</span>
+                            {{ message }}
+                        </div>
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+
+                    <form method="POST" action="{% url 'register' %}" class="flex flex-col gap-6">
+                        {% csrf_token %}
+                        <div class="flex flex-col gap-2">
+                            <label class="text-primary text-xs font-tech uppercase tracking-[0.15em] ml-1"
+                                for="username">User Identity</label>
+                            <input name="username" required
+                                class="peer w-full h-12 rounded-sm border border-zinc-700 bg-surface-dark/50 px-4 text-white focus:border-primary focus:ring-1 focus:ring-primary transition-all"
+                                id="username" placeholder="ENTER USERNAME" type="text" />
+                        </div>
+                        <div class="flex flex-col gap-2">
+                            <label class="text-primary text-xs font-tech uppercase tracking-[0.15em] ml-1"
+                                for="email">Comms Address</label>
+                            <input name="email" required
+                                class="peer w-full h-12 rounded-sm border border-zinc-700 bg-surface-dark/50 px-4 text-white focus:border-primary focus:ring-1 focus:ring-primary transition-all"
+                                id="email" placeholder="NAME@NETWORK.COM" type="email" />
+                        </div>
+                        <div class="flex flex-col gap-2">
+                            <label class="text-primary text-xs font-tech uppercase tracking-[0.15em] ml-1"
+                                for="password">Access Key</label>
+                            <input name="password" required
+                                class="peer w-full h-12 rounded-sm border border- zinc-700 bg-surface-dark/50 px-4 text-white focus:border-primary focus:ring-1 focus:ring-primary transition-all"
+                                id="password" placeholder="MIN 8 CHARS" type="password" />
+                        </div>
+
+                        <button type="submit"
+                            class="mt-4 relative group overflow-hidden w-full h-14 rounded-sm bg-transparent border border-primary text-primary font-tech font-bold uppercase tracking-[0.2em] transition-all hover:text-black hover:bg-primary">
+                            <span class="relative z-10 flex items-center justify-center gap-2">
+                                Initialize Account <span class="material-symbols-outlined text-sm">chevron_right</span>
+                            </span>
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="w-full border-t border-white/10 bg-background-dark py-8 relative z-10">
+        <div class="mx-auto max-w-7xl px-6 flex flex-col md:flex-row items-center justify-between gap-4">
+            <p class="text-xs font-display text-zinc-600 uppercase tracking-widest">© 2024 CloudShare // All Systems
+                Operational.</p>
+        </div>
+    </footer>
+
+    
+    <div id="global-loader"
+        class="fixed inset-0 z-[100] flex items-center justify-center bg-background-dark/80 backdrop-blur-sm transition-opacity duration-300 pointer-events-none opacity-0"
+        aria-hidden="true">
+        <div class="flex flex-col items-center gap-4">
+            <div class="relative size-16">
+                <div class="absolute inset-0 rounded-full border-4 border-surface-dark"></div>
+                <div class="absolute inset-0 rounded-full border-4 border-primary border-t-transparent animate-spin">
+                </div>
+            </div>
+            <p class="text-sm font-bold text-white uppercase tracking-widest animate-pulse font-tech">Initializing</p>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const loader = document.getElementById('global-loader');
+
+            const showLoader = () => {
+                loader.classList.remove('opacity-0', 'pointer-events-none');
+                loader.setAttribute('aria-hidden', 'false');
+            };
+
+            const hideLoader = () => {
+                loader.classList.add('opacity-0', 'pointer-events-none');
+                loader.setAttribute('aria-hidden', 'true');
+            };
+
+            document.addEventListener('click', (e) => {
+                const link = e.target.closest('a');
+                if (link) {
+                    const href = link.getAttribute('href');
+                    if (!href || href.startsWith('#') || href.startsWith('javascript:')) return;
+                    showLoader();
+                }
+            }, true);
+
+            document.addEventListener('submit', (e) => {
+                showLoader();
+            });
+
+            window.addEventListener('pageshow', (e) => {
+                if (e.persisted) {
+                    hideLoader();
+                }
+            });
+        });
+    </script>
+</body>
+
+</html>
