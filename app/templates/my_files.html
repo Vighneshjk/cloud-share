@@ -33,12 +33,11 @@
             <div class="flex gap-2">
                 <select name="sort" onchange="this.form.submit()"
                     class="h-10 bg-background-dark border border-surface-border rounded-lg text-sm text-white focus:border-primary focus:ring-primary">
-                    <option value="date" {% if current_sort|default:"date"=="date" %}selected{% endif %}>Newest first
+                    <option value="date" {% if current_sort|default:"date" == "date" %}selected{% endif %}>Newest first
                     </option>
-                    <option value="name" {% if current_sort|default:"date"=="name" %}selected{% endif %}> Name (A-Z)
+                    <option value="name" {% if current_sort|default:"date" == "name" %}selected{% endif %}> Name (A-Z)
                     </option>
-                    <option value="size" {% if current_sort|default:"date"=="size" %}selected{% endif %}>Size (Large
-                        first)
+                    <option value="size" {% if current_sort|default:"date" == "size" %}selected{% endif %}>Size (Large first)
                     </option>
                 </select>
             </div>

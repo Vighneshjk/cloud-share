@@ -24,8 +24,7 @@
                     class="size-24 rounded-2xl bg-surface-dark border border-surface-border flex items-center justify-center text-primary shadow-neon mb-6">
                     <span class="material-symbols-outlined text-5xl">
                         {% if file.original_name|lower|slice:"-4:" == ".pdf" %}picture_as_pdf
-                        {% elif file.original_name|lower|slice:"-4:" == ".png" or file.original_name|lower|slice:"-4:"
-                        == ".jpg" %}image
+                        {% elif file.original_name|lower|slice:"-4:" == ".png" or file.original_name|lower|slice:"-4:" == ".jpg" %}image
                         {% elif file.original_name|lower|slice:"-4:" == ".zip" %}folder_zip
                         {% else %}description{% endif %}
                     </span>

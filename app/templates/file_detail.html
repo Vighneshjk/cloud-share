@@ -4,7 +4,7 @@
 
 {% block content %}
 <div class="flex flex-col gap-6">
-    
+
     <nav class="flex items-center text-sm">
         <a href="{% url 'dashboard' %}" class="text-text-muted hover:text-white transition-colors">Dashboard</a>
         <span class="mx-2 text-text-muted">/</span>
@@ -13,7 +13,7 @@
         <span class="text-primary font-bold uppercase truncate max-w-[200px]">{{ file.original_name }}</span>
     </nav>
 
-    
+
     <div class="flex flex-col md:flex-row md:items-start justify-between gap-6 pb-6 border-b border-surface-border">
         <div class="flex gap-4">
             <div
@@ -30,11 +30,13 @@
             <div class="min-w-0">
                 <h1 class="text-3xl md:text-4xl font-black text-white tracking-tight mb-2 truncate max-w-xl">{{ file.original_name }}</h1>
                 <div class="flex flex-wrap items-center gap-3 text-text-muted text-sm">
-                    <span class="bg-surface-dark px-2 py-0.5 rounded text-white border border-surface-border uppercase tracking-widest text-[10px] font-bold">Secure</span>
+                    <span
+                        class="bg-surface-dark px-2 py-0.5 rounded text-white border border-surface-border uppercase tracking-widest text-[10px] font-bold">Secure</span>
                     <span>•</span>
                     <span>Uploaded {{ file.uploaded_at|date:"M d, Y" }}</span>
                     <span>•</span>
-                    <span class="flex items-center gap-1"><span class="material-symbols-outlined text-[14px]">lock</span> Private</span>
+                    <span class="flex items-center gap-1"><span
+                            class="material-symbols-outlined text-[14px]">lock</span> Private</span>
                 </div>
             </div>
         </div>
@@ -55,11 +57,11 @@
         </div>
     </div>
 
-    
+
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        
+
         <div class="lg:col-span-2 flex flex-col gap-8">
-            
+
             <section class="bg-surface-dark border border-surface-border rounded-xl p-6 relative overflow-hidden">
                 <div class="absolute top-0 right-0 w-32 h-32 bg-primary/5 blur-[80px] rounded-full pointer-events-none">
                 </div>
@@ -90,7 +92,7 @@
                 </div>
             </section>
 
-            
+
             <section class="bg-surface-dark border border-surface-border rounded-xl overflow-hidden">
                 <div class="p-6 border-b border-surface-border flex justify-between items-center bg-background-dark/50">
                     <h3 class="text-lg font-bold text-white flex items-center gap-2 uppercase tracking-wide">
@@ -98,7 +100,8 @@
                         Active Share Uplinks
                     </h3>
                     <span
-                        class="text-xs font-bold text-primary bg-primary/10 px-2 py-1 rounded border border-primary/20 uppercase">{{ links|length }} ACTIVE</span>
+                        class="text-xs font-bold text-primary bg-primary/10 px-2 py-1 rounded border border-primary/20 uppercase">{{
+                        links|length }} ACTIVE</span>
                 </div>
                 <div class="overflow-x-auto">
                     <table class="w-full text-left border-collapse">
@@ -144,7 +147,8 @@
                             </tr>
                             {% empty %}
                             <tr>
-                                <td colspan="3" class="p-12 text-center text-text-muted italic">No active links generated for this vector.</td>
+                                <td colspan="3" class="p-12 text-center text-text-muted italic">No active links
+                                    generated for this vector.</td>
                             </tr>
                             {% endfor %}
                         </tbody>
@@ -153,9 +157,9 @@
             </section>
         </div>
 
-        
+
         <div class="flex flex-col gap-8">
-            
+
             {% include 'includes/security_status.html' %}
             <div
                 class="bg-surface-dark border border-primary/30 rounded-xl p-6 shadow-[0_0_30px_rgba(244,37,140,0.05)] relative overflow-hidden">
@@ -172,6 +176,7 @@
                             <option value="30m">30 Minutes</option>
                             <option value="1h" selected>1 Hour</option>
                             <option value="24h">24 Hours</option>
+                            <option value="48h">48 Hours / 2 Days</option>
                             <option value="7d">7 Days</option>
                         </select>
                     </div>
@@ -184,7 +189,7 @@
                 </form>
             </div>
 
-            
+
             <div class="border border-red-900/50 bg-red-900/5 rounded-xl p-6">
                 <h3 class="text-lg font-bold text-white mb-2">Danger Zone</h3>
                 <p class="text-text-muted text-xs mb-6">Purging this vector will permanently erase it from all nodes and

@@ -120,11 +120,12 @@
                                     <div
                                         class="size-10 rounded border border-surface-border bg-background-dark flex items-center justify-center text-primary group-hover:border-primary transition-colors">
                                         <span class="material-symbols-outlined">
-                                            {% if file.original_name|lower|slice:"-4:" == ".pdf" %}picture_as_pdf
-                                            {% elif file.original_name|lower|slice:"-4:" == ".png" or
-                                            file.original_name|lower|slice:"-4:" == ".jpg" %}image
-                                            {% elif file.original_name|lower|slice:"-4:" == ".zip" %}folder_zip
+                                            {% with ext=file.original_name|lower|slice:"-4:" %}
+                                            {% if ext == ".pdf" %}picture_as_pdf
+                                            {% elif ext == ".png" or ext == ".jpg" %}image
+                                            {% elif ext == ".zip" %}folder_zip
                                             {% else %}description{% endif %}
+                                            {% endwith %}
                                         </span>
                                     </div>
                                     <div class="flex flex-col">

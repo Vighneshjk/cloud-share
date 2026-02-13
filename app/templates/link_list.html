@@ -4,19 +4,21 @@
 
 {% block content %}
 <div class="flex flex-col gap-8">
-    
+
     <div class="flex flex-col md:flex-row md:items-end justify-between gap-6">
         <div>
-            <h1 class="text-4xl md:text-5xl font-black text-white tracking-tight uppercase leading-none">Secure <span class="text-primary text-glow">Uplinks</span></h1>
+            <h1 class="text-4xl md:text-5xl font-black text-white tracking-tight uppercase leading-none">Secure <span
+                    class="text-primary text-glow">Uplinks</span></h1>
             <p class="text-text-muted mt-4 text-lg">Monitor and manage encrypted transit vectors.</p>
         </div>
-        <a href="{% url 'file_list' %}" class="h-12 px-6 flex items-center gap-3 bg-primary hover:bg-primary-hover text-white font-black tracking-widest uppercase rounded-xl shadow-neon transition-all">
+        <a href="{% url 'file_list' %}"
+            class="h-12 px-6 flex items-center gap-3 bg-primary hover:bg-primary-hover text-white font-black tracking-widest uppercase rounded-xl shadow-neon transition-all">
             <span class="material-symbols-outlined">add_link</span>
             <span>Initialize New</span>
         </a>
     </div>
 
-    
+
     <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
         <div class="bg-surface-dark border border-surface-border rounded-xl p-6 relative overflow-hidden group">
             <div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
@@ -34,7 +36,8 @@
         <div class="overflow-x-auto">
             <table class="w-full text-left border-collapse">
                 <thead>
-                    <tr class="bg-background-dark/50 border-b border-surface-border text-[10px] font-black uppercase tracking-[0.2em] text-text-muted">
+                    <tr
+                        class="bg-background-dark/50 border-b border-surface-border text-[10px] font-black uppercase tracking-[0.2em] text-text-muted">
                         <th class="px-6 py-5">Uplink Target</th>
                         <th class="px-6 py-5">Status</th>
                         <th class="px-6 py-5">Time Remaining</th>
@@ -46,17 +49,21 @@
                     <tr class="group hover:bg-white/[0.02] transition-colors">
                         <td class="px-6 py-4">
                             <div class="flex items-center gap-4">
-                                <div class="size-10 rounded-lg border border-surface-border bg-background-dark flex items-center justify-center text-primary group-hover:border-primary transition-colors">
+                                <div
+                                    class="size-10 rounded-lg border border-surface-border bg-background-dark flex items-center justify-center text-primary group-hover:border-primary transition-colors">
                                     <span class="material-symbols-outlined">
-                                        {% if link.file.original_name|lower|slice:"-4:" == ".pdf" %}picture_as_pdf
-                                        {% elif link.file.original_name|lower|slice:"-4:" == ".png" or
-                                        link.file.original_name|lower|slice:"-4:" == ".jpg" %}image
-                                        {% elif link.file.original_name|lower|slice:"-4:" == ".zip" %}folder_zip
+                                        {% with ext=link.file.original_name|lower|slice:"-4:" %}
+                                        {% if ext == ".pdf" %}picture_as_pdf
+                                        {% elif ext == ".png" or ext == ".jpg" %}image
+                                        {% elif ext == ".zip" %}folder_zip
                                         {% else %}description{% endif %}
+                                        {% endwith %}
                                     </span>
                                 </div>
                                 <div class="min-w-0">
-                                    <p class="text-white font-bold truncate max-w-xs group-hover:text-primary transition-colors">{{ link.file.original_name }}</p>
+                                    <p
+                                        class="text-white font-bold truncate max-w-xs group-hover:text-primary transition-colors">
+                                        {{ link.file.original_name }}</p>
                                     <p class="text-[9px] font-mono text-text-muted mt-0.5 uppercase tracking-tighter">{{ link.link_id|stringformat:"s"|slice:":12" }}</p>
                                 </div>
                             </div>
@@ -68,14 +75,16 @@
                                 <span class="size-1.5 rounded-full bg-red-500"></span> Deactivated
                             </span>
                             {% else %}
-                            <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md border border-emerald-500/30 bg-emerald-500/10 text-emerald-400 text-[10px] font-black uppercase tracking-widest">
+                            <span
+                                class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md border border-emerald-500/30 bg-emerald-500/10 text-emerald-400 text-[10px] font-black uppercase tracking-widest">
                                 <span class="size-1.5 rounded-full bg-emerald-500 animate-pulse"></span> Active
                             </span>
                             {% endif %}
                         </td>
                         <td class="px-6 py-4">
                             <div class="flex flex-col">
-                                <span class="text-xs font-bold {% if link.is_expired %}text-red-400{% else %}text-white{% endif %}">{{ link.expires_at|timeuntil }}</span>
+                                <span
+                                    class="text-xs font-bold {% if link.is_expired %}text-red-400{% else %}text-white{% endif %}">{{ link.expires_at|timeuntil }}</span>
                                 <span class="text-[9px] text-text-muted uppercase tracking-wider">Until Purge</span>
                             </div>
                         </td>
@@ -88,7 +97,8 @@
                                     title="Copy Link">
                                     <span class="material-symbols-outlined text-xl">content_copy</span>
                                 </button>
-                                <a href="{% url 'share_page' link.link_id %}" target="_blank" class="p-2 text-text-muted hover:text-primary hover:bg-white/10 rounded-lg transition-all"
+                                <a href="{% url 'share_page' link.link_id %}" target="_blank"
+                                    class="p-2 text-text-muted hover:text-primary hover:bg-white/10 rounded-lg transition-all"
                                     title="View Portal">
                                     <span class="material-symbols-outlined text-xl">open_in_new</span>
                                 </a>
