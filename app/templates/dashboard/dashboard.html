@@ -4,7 +4,7 @@
 
 {% block content %}
 <div class="flex flex-col gap-8">
-    
+
     <div class="flex flex-col md:flex-row md:items-end justify-between gap-6">
         <div>
             <h1 class="text-4xl md:text-5xl font-black text-white tracking-tight leading-tight">
@@ -23,9 +23,9 @@
         </div>
     </div>
 
-    
+
     <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-        
+
         <div
             class="bg-surface-dark border border-surface-border rounded-xl p-6 flex flex-col gap-4 group hover:border-primary/50 transition-colors relative overflow-hidden">
             <div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
@@ -49,7 +49,7 @@
             </div>
         </div>
 
-        
+
         <div
             class="bg-surface-dark border border-surface-border rounded-xl p-6 flex flex-col gap-4 group hover:border-primary/50 transition-colors relative overflow-hidden">
             <div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
@@ -66,7 +66,7 @@
             </div>
         </div>
 
-        
+
         <div
             class="bg-surface-dark border border-surface-border rounded-xl p-6 flex flex-col gap-4 group hover:border-primary/50 transition-colors relative overflow-hidden">
             <div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
@@ -87,9 +87,9 @@
         </div>
     </div>
 
-    
+
     <div class="grid grid-cols-1 xl:grid-cols-3 gap-8 mb-8">
-        
+
         <div
             class="xl:col-span-2 bg-surface-dark border border-surface-border rounded-xl overflow-hidden flex flex-col">
             <div class="flex items-center justify-between p-6 border-b border-surface-border">
@@ -107,8 +107,8 @@
                         <tr
                             class="text-text-muted text-xs uppercase font-semibold bg-background-dark/50 border-b border-surface-border">
                             <th class="px-6 py-4">File Status</th>
-                            <th class="px-6 py-4">Size</th>
-                            <th class="px-6 py-4">Timestamp</th>
+                            <th class="hidden sm:table-cell px-6 py-4">Size</th>
+                            <th class="hidden md:table-cell px-6 py-4">Timestamp</th>
                             <th class="px-6 py-4 text-right">Action</th>
                         </tr>
                     </thead>
@@ -121,21 +121,25 @@
                                         class="size-10 rounded border border-surface-border bg-background-dark flex items-center justify-center text-primary group-hover:border-primary transition-colors">
                                         <span class="material-symbols-outlined">
                                             {% if file.original_name|lower|slice:"-4:" == ".pdf" %}picture_as_pdf
-                                            {% elif file.original_name|lower|slice:"-4:" == ".png" or file.original_name|lower|slice:"-4:" == ".jpg" %}image
+                                            {% elif file.original_name|lower|slice:"-4:" == ".png" or
+                                            file.original_name|lower|slice:"-4:" == ".jpg" %}image
                                             {% elif file.original_name|lower|slice:"-4:" == ".zip" %}folder_zip
                                             {% else %}description{% endif %}
                                         </span>
                                     </div>
                                     <div class="flex flex-col">
                                         <a href="{% url 'file_detail' file.id %}"
-                                            class="font-bold text-white group-hover:text-primary transition-colors truncate max-w-[200px]">{{ file.original_name }}</a>
+                                            class="font-bold text-white group-hover:text-primary transition-colors truncate max-w-[200px]">{{
+                                            file.original_name }}</a>
                                         <span class="text-[10px] text-text-muted uppercase tracking-widest">Secure
                                             Upload</span>
                                     </div>
                                 </div>
                             </td>
-                            <td class="px-6 py-4 text-sm text-text-muted font-mono">{{ file.size|filesizeformat }}</td>
-                            <td class="px-6 py-4 text-sm text-text-muted">{{ file.uploaded_at|date:"M d, Y" }}</td>
+                            <td class="hidden sm:table-cell px-6 py-4 text-sm text-text-muted font-mono">{{
+                                file.size|filesizeformat }}</td>
+                            <td class="hidden md:table-cell px-6 py-4 text-sm text-text-muted">{{
+                                file.uploaded_at|date:"M d, Y" }}</td>
                             <td class="px-6 py-4 text-right">
                                 <a href="{% url 'file_detail' file.id %}"
                                     class="text-text-muted hover:text-white transition-colors">
@@ -158,14 +162,15 @@
             </div>
         </div>
 
-        
+
         <div class="bg-surface-dark border border-surface-border rounded-xl p-6 flex flex-col gap-6">
             <div class="flex items-center justify-between">
                 <div class="flex items-center gap-2">
                     <div class="w-1 h-6 bg-primary shadow-[0_0_10px_rgba(244,37,140,0.5)]"></div>
                     <h3 class="text-lg font-bold text-white uppercase tracking-wide">Secure Links</h3>
                 </div>
-                <a href="{% url 'link_list' %}" class="text-xs font-bold text-primary hover:text-white transition-colors uppercase tracking-widest">Manage</a>
+                <a href="{% url 'link_list' %}"
+                    class="text-xs font-bold text-primary hover:text-white transition-colors uppercase tracking-widest">Manage</a>
             </div>
 
             <div class="flex flex-col gap-4">
@@ -176,7 +181,8 @@
                     <div class="flex justify-between items-start mb-2">
                         <div class="flex items-center gap-2">
                             <span class="material-symbols-outlined text-sm text-primary">link</span>
-                            <span class="text-sm font-bold text-white truncate max-w-[150px]">{{ link.file.original_name }}</span>
+                            <span class="text-sm font-bold text-white truncate max-w-[150px]">{{ link.file.original_name
+                                }}</span>
                         </div>
                         <span
                             class="text-[8px] font-bold text-primary border border-primary/30 px-1.5 py-0.5 rounded uppercase tracking-tighter">Active</span>
@@ -188,7 +194,8 @@
                 </div>
                 {% endfor %}
                 {% else %}
-                <div class="flex flex-col items-center justify-center p-8 text-center bg-background-dark/50 rounded-lg border border-dashed border-surface-border">
+                <div
+                    class="flex flex-col items-center justify-center p-8 text-center bg-background-dark/50 rounded-lg border border-dashed border-surface-border">
                     <span class="material-symbols-outlined text-3xl text-text-muted/30 mb-2">link_off</span>
                     <p class="text-xs text-text-muted">No active share links.</p>
                 </div>

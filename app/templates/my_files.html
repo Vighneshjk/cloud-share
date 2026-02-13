@@ -23,25 +23,30 @@
         class="flex flex-wrap items-center justify-between gap-4 p-4 bg-surface-dark border border-surface-border rounded-xl">
         <form method="GET" class="flex flex-1 items-center gap-4">
             <div class="relative group flex-1 max-w-md">
-                <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-text-muted group-focus-within:text-primary transition-colors">search</span>
-                <input name="search" value="{{ request.GET.search|default:'' }}" class="h-10 w-full rounded-lg border border-surface-border bg-background-dark pl-10 pr-4 text-sm text-white placeholder-text-muted focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary transition-all" placeholder="Search files..." type="text" />
+                <span
+                    class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-text-muted group-focus-within:text-primary transition-colors">search</span>
+                <input name="search" value="{{ request.GET.search|default:'' }}"
+                    class="h-10 w-full rounded-lg border border-surface-border bg-background-dark pl-10 pr-4 text-sm text-white placeholder-text-muted focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary transition-all"
+                    placeholder="Search files..." type="text" />
             </div>
 
             <div class="flex gap-2">
                 <select name="sort" onchange="this.form.submit()"
                     class="h-10 bg-background-dark border border-surface-border rounded-lg text-sm text-white focus:border-primary focus:ring-primary">
-                    <option value="date" {% if current_sort|default:"date" == "date" %}selected{% endif %}>Newest first
+                    <option value="date" {% if current_sort|default:"date"=="date" %}selected{% endif %}>Newest first
                     </option>
-                    <option value="name" {% if current_sort|default:"date" == "name" %}selected{% endif %}> Name (A-Z)
+                    <option value="name" {% if current_sort|default:"date"=="name" %}selected{% endif %}> Name (A-Z)
                     </option>
-                    <option value="size" {% if current_sort|default:"date" == "size" %}selected{% endif %}>Size (Large first)
+                    <option value="size" {% if current_sort|default:"date"=="size" %}selected{% endif %}>Size (Large
+                        first)
                     </option>
                 </select>
             </div>
         </form>
     </div>
     <div class="bg-surface-dark border border-surface-border rounded-xl overflow-hidden shadow-2xl">
-        <div class="grid grid-cols-12 gap-4 border-b border-surface-border p-4 text-xs font-bold uppercase tracking-wider text-text-muted">
+        <div
+            class="grid grid-cols-12 gap-4 border-b border-surface-border p-4 text-xs font-bold uppercase tracking-wider text-text-muted">
             <div class="col-span-12 md:col-span-5 text-glow">File Name</div>
             <div class="hidden md:block col-span-2">Size</div>
             <div class="hidden md:block col-span-2">Uploaded</div>
@@ -52,7 +57,8 @@
             <div class="group grid grid-cols-12 items-center gap-4 p-4 hover:bg-white/[0.02] transition-colors cursor-pointer"
                 onclick="window.location='{% url 'file_detail' file.id %}';">
                 <div class="col-span-12 md:col-span-5 flex items-center gap-4">
-                    <div class="flex h-12 w-12 items-center justify-center rounded border border-surface-border bg-background-dark text-primary group-hover:border-primary transition-colors">
+                    <div
+                        class="flex h-12 w-12 items-center justify-center rounded border border-surface-border bg-background-dark text-primary group-hover:border-primary transition-colors">
                         <span class="material-symbols-outlined text-2xl">
                             {% with ext=file.original_name|lower|slice:"-4:" %}
                             {% if ext == ".pdf" %}picture_as_pdf
@@ -63,13 +69,17 @@
                         </span>
                     </div>
                     <div class="flex flex-col min-w-0">
-                        <span class="font-bold text-white group-hover:text-primary transition-colors truncate">{{ file.original_name }}</span>
+                        <span class="font-bold text-white group-hover:text-primary transition-colors truncate">{{
+                            file.original_name }}</span>
                         <span class="text-[10px] text-text-muted uppercase tracking-widest mt-0.5">Secure Storage</span>
                     </div>
                 </div>
-                <div class="hidden md:block col-span-2 text-sm text-text-muted font-mono uppercase tracking-tight">{{ file.size|filesizeformat }}</div>
-                <div class="hidden md:block col-span-2 text-sm text-text-muted">{{ file.uploaded_at|date:"M d, Y" }}</div>
-                <div class="col-span-12 md:col-span-3 flex justify-end items-center gap-2">
+                <div class="hidden md:block col-span-2 text-sm text-text-muted font-mono uppercase tracking-tight">{{
+                    file.size|filesizeformat }}</div>
+                <div class="hidden md:block col-span-2 text-sm text-text-muted">{{ file.uploaded_at|date:"M d, Y" }}
+                </div>
+                <div
+                    class="col-span-12 md:col-span-3 flex justify-start md:justify-end items-center gap-2 mt-2 md:mt-0">
                     <a href="{% url 'download_file_direct' file.id %}"
                         class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-surface-border hover:border-primary hover:text-primary transition-all text-xs font-bold uppercase tracking-widest bg-background-dark"
                         onclick="event.stopPropagation()">
@@ -96,7 +106,9 @@
                 <span class="material-symbols-outlined text-6xl mb-4">cloud_off</span>
                 <h3 class="text-xl font-bold text-white mb-2 uppercase tracking-widest">No data found</h3>
                 <p class="text-sm text-text-muted mb-8">Initialize your vault by uploading a new vector.</p>
-                <a href="{% url 'upload' %}" class="bg-primary hover:bg-primary-hover text-white font-bold px-8 py-3 rounded-lg shadow-neon transition-all">Upload Vector</a>
+                <a href="{% url 'upload' %}"
+                    class="bg-primary hover:bg-primary-hover text-white font-bold px-8 py-3 rounded-lg shadow-neon transition-all">Upload
+                    Vector</a>
             </div>
             {% endfor %}
         </div>

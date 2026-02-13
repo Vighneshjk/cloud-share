@@ -6,14 +6,14 @@
     <meta charset="utf-8" />
     <meta content="width=device-width, initial-scale=1.0" name="viewport" />
     <title>{% block title %}CloudShare - Secure Dashboard{% endblock %}</title>
-    
-    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-    
+
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries,typography,aspect-ratio"></script>
+
     <link href="https://fonts.googleapis.com" rel="preconnect" />
     <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect" />
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap"
         rel="stylesheet" />
-    
+
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
         rel="stylesheet" />
     <script id="tailwind-config">
@@ -71,10 +71,14 @@
 
 <body
     class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-white font-display overflow-hidden h-screen flex flex-col">
-    
+
     <header
         class="flex items-center justify-between whitespace-nowrap border-b border-surface-border bg-background-dark/95 backdrop-blur-sm px-6 py-3 shrink-0 z-20">
-        <div class="flex items-center gap-8">
+        <div class="flex items-center gap-4">
+            <button id="mobile-menu-button"
+                class="md:hidden text-white p-2 hover:bg-surface-dark rounded-lg transition-colors">
+                <span class="material-symbols-outlined">menu</span>
+            </button>
             <a class="flex items-center gap-3 text-white hover:opacity-80 transition-opacity" href="{% url 'home' %}">
                 <div class="size-8 text-primary">
                     <svg class="w-full h-full" fill="none" viewbox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
@@ -83,7 +87,7 @@
                             fill="currentColor"></path>
                     </svg>
                 </div>
-                <h2 class="text-white text-xl font-bold leading-tight tracking-[-0.015em]">CloudShare</h2>
+                <h2 class="text-white text-lg sm:text-xl font-bold leading-tight tracking-[-0.015em]">CloudShare</h2>
             </a>
             {% if user.is_authenticated %}
             <form action="{% url 'file_list' %}" method="GET" class="hidden md:flex min-w-40 w-64 lg:w-96">
@@ -99,7 +103,7 @@
             </form>
             {% endif %}
         </div>
-        <div class="flex items-center justify-end gap-6">
+        <div class="flex items-center justify-end gap-3 sm:gap-6">
             {% if user.is_authenticated %}
             <a href="{% url 'upload' %}"
                 class="hidden sm:flex items-center gap-2 rounded-lg h-10 px-6 bg-primary hover:bg-primary-hover transition-all text-white text-sm font-bold shadow-neon">
@@ -112,7 +116,7 @@
                     <span class="text-xs text-text-muted">User Profile</span>
                 </div>
                 <a href="{% url 'profile' %}"
-                    class="rounded-full size-10 border-2 border-surface-border hover:border-primary transition-colors bg-cover bg-center overflow-hidden">
+                    class="rounded-full size-8 sm:size-10 border-2 border-surface-border hover:border-primary transition-colors bg-cover bg-center overflow-hidden shrink-0">
                     {% if user.profile.avatar %}
                     <img src="{{ user.profile.avatar.url }}" alt="Avatar" class="size-full object-cover">
                     {% else %}
@@ -120,7 +124,7 @@
                         class="size-full object-cover">
                     {% endif %}
                 </a>
-                <form action="{% url 'logout' %}" method="POST" class="ml-2">
+                <form action="{% url 'logout' %}" method="POST" class="ml-1 sm:ml-2">
                     {% csrf_token %}
                     <button type="submit" class="p-2 text-text-muted hover:text-red-400 transition-colors"
                         title="Logout">
@@ -132,20 +136,32 @@
             <a href="{% url 'login' %}"
                 class="text-sm font-bold text-white hover:text-primary transition-colors">Login</a>
             <a href="{% url 'register' %}"
-                class="rounded-lg bg-primary px-6 py-2 text-sm font-bold text-white shadow-neon hover:bg-primary-hover transition-all">Sign
+                class="rounded-lg bg-primary px-4 sm:px-6 py-2 text-xs sm:text-sm font-bold text-white shadow-neon hover:bg-primary-hover transition-all">Sign
                 Up</a>
             {% endif %}
         </div>
     </header>
 
-    <div class="flex flex-1 overflow-hidden">
+    <div class="flex flex-1 overflow-hidden relative">
         {% if user.is_authenticated %}
-        <aside
-            class="hidden md:flex flex-col w-64 bg-background-dark border-r border-surface-border shrink-0 justify-between">
+        <!-- Sidebar Backdrop (Mobile Only) -->
+        <div id="sidebar-backdrop"
+            class="fixed inset-0 bg-black/60 backdrop-blur-sm z-30 opacity-0 pointer-events-none transition-opacity md:hidden">
+        </div>
+
+        <!-- Sidebar -->
+        <aside id="main-sidebar"
+            class="fixed inset-y-0 left-0 w-64 bg-background-dark border-r border-surface-border z-40 -translate-x-full transition-transform md:translate-x-0 md:static md:flex md:flex-col shrink-0 justify-between">
             <div class="flex flex-col gap-4 p-4">
-                <p class="px-3 text-xs font-bold text-text-muted uppercase tracking-wider">Menu</p>
+                <div class="flex items-center justify-between md:hidden mb-4">
+                    <h2 class="text-white text-xl font-bold">Menu</h2>
+                    <button id="close-menu-button" class="text-text-muted hover:text-white transition-colors">
+                        <span class="material-symbols-outlined">close</span>
+                    </button>
+                </div>
+                <p class="px-3 text-xs font-bold text-text-muted uppercase tracking-wider">Storage</p>
                 <nav class="flex flex-col gap-1">
-                    <a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-text-muted hover:bg-surface-dark hover:text-white transition-all"
+                    <a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-text-muted hover:bg-surface-dark hover:text-white transition-all active:bg-primary/10"
                         href="{% url 'dashboard' %}">
                         <span class="material-symbols-outlined">dashboard</span>
                         <span class="text-sm font-medium">Dashboard</span>
@@ -183,7 +199,7 @@
                 <form action="{% url 'logout' %}" method="POST">
                     {% csrf_token %}
                     <button type="submit"
-                        class="flex items-center gap-3 w-full px-3 py-2.5 rounded-lg hover:bg-red-500/10 text-text-muted hover:text-red-400 transition-all">
+                        class="flex items-center gap-3 w-full px-3 py-2.5 rounded-lg hover:bg-red-500/10 text-text-muted hover:text-red-400 transition-all text-left">
                         <span class="material-symbols-outlined">logout</span>
                         <span class="text-sm font-medium">Logout</span>
                     </button>
@@ -193,7 +209,7 @@
         {% endif %}
 
         <main class="flex-1 flex flex-col overflow-y-auto bg-background-dark">
-            <div class="flex-1 p-8 max-w-7xl w-full mx-auto">
+            <div class="flex-1 p-4 sm:p-8 max-w-7xl w-full mx-auto">
                 {% if messages %}
                 <div class="mb-6 space-y-2">
                     {% for message in messages %}
@@ -212,14 +228,14 @@
         </main>
     </div>
 
-    
+
     <div class="fixed inset-0 pointer-events-none -z-10 overflow-hidden">
         <div class="absolute top-[-10%] right-[-5%] w-[500px] h-[500px] bg-primary/5 rounded-full blur-[120px]"></div>
         <div class="absolute bottom-[-10%] left-[-5%] w-[600px] h-[600px] bg-blue-500/5 rounded-full blur-[150px]">
         </div>
     </div>
     {% block extra_js %}{% endblock %}
-    
+
     <div id="global-loader"
         class="fixed inset-0 z-[100] flex items-center justify-center bg-background-dark/80 backdrop-blur-sm transition-opacity duration-300 pointer-events-none opacity-0"
         aria-hidden="true">
@@ -290,10 +306,33 @@
                 }
             });
 
+            // Mobile sidebar toggle logic
+            const mobileMenuButton = document.getElementById('mobile-menu-button');
+            const closeMenuButton = document.getElementById('close-menu-button');
+            const mainSidebar = document.getElementById('main-sidebar');
+            const sidebarBackdrop = document.getElementById('sidebar-backdrop');
+
+            const toggleSidebar = (show) => {
+                if (show) {
+                    mainSidebar?.classList.remove('-translate-x-full');
+                    sidebarBackdrop?.classList.remove('opacity-0', 'pointer-events-none');
+                    document.body.classList.add('overflow-hidden');
+                } else {
+                    mainSidebar?.classList.add('-translate-x-full');
+                    sidebarBackdrop?.classList.add('opacity-0', 'pointer-events-none');
+                    document.body.classList.remove('overflow-hidden');
+                }
+            };
+
+            mobileMenuButton?.addEventListener('click', () => toggleSidebar(true));
+            closeMenuButton?.addEventListener('click', () => toggleSidebar(false));
+            sidebarBackdrop?.addEventListener('click', () => toggleSidebar(false));
+
             // Hide on back/forward cache
             window.addEventListener('pageshow', (e) => {
                 if (e.persisted) {
                     hideLoader();
+                    toggleSidebar(false);
                 }
             });
         });
