@@ -94,6 +94,8 @@ def generate_secure_link(request, file_id):
         '30m': timedelta(minutes=30),
         '1h': timedelta(hours=1),
         '24h': timedelta(hours=24),
+        '48h': timedelta(hours=48),
+        '2d': timedelta(days=2),
         '7d': timedelta(days=7),
     }
     expiry_time = timezone.now() + durations.get(expiry_choice, timedelta(hours=1))

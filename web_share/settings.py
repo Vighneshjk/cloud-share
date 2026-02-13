@@ -23,6 +23,19 @@ ALLOWED_HOSTS = ['.ngrok-free.dev', '127.0.0.1', 'localhost']
 
 CSRF_TRUSTED_ORIGINS = ['https://*.ngrok-free.dev']
 
+# Proxy settings for Secure Cookies/CSRF behind Ngrok
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+USE_X_FORWARDED_HOST = True
+USE_X_FORWARDED_PORT = True
+
+# Session and CSRF Security for Production/Ngrok
+SESSION_COOKIE_AGE = 172800  # 48 hours in seconds
+SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SECURE = True
+SESSION_COOKIE_SAMESITE = 'None'
+CSRF_COOKIE_SAMESITE = 'None'
+SESSION_EXPIRE_AT_BROWSER_CLOSE = False
+
 
 
 INSTALLED_APPS = [
@@ -117,6 +130,10 @@ LOGOUT_REDIRECT_URL = '/login/'     # optional: where to go after logout
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
+
+# File Upload Settings
+DATA_UPLOAD_MAX_MEMORY_SIZE = 104857600  # 100MB
+FILE_UPLOAD_MAX_MEMORY_SIZE = 104857600  # 100MB
 
 RAZORPAY_KEY_ID = 'rzp_test_YOUR_KEY'  # Replace with actual key
 RAZORPAY_KEY_SECRET = 'YOUR_SECRET_KEY'  # Replace with actual secret
